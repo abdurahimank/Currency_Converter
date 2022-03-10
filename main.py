@@ -1,32 +1,22 @@
-import json
 import requests
+import json
 
 
 currency_from = input().lower()
-cache = {}
 r = requests.get(f"http://www.floatrates.com/daily/{currency_from}.json")
-conv = json.loads(r.text)
-if currency_from == "usd":
-    cache["eur"] = conv["eur"]
-elif currency_from == "eur":
-    cache["usd"] = conv["usd"]
-else:
-    cache["usd"] = conv["usd"]
-    cache["eur"] = conv["eur"]
-
+data = json.loads(r.text)
+cache = {'usd': data['usd']['rate'] if currency_from != 'usd' else 1,
+         'eur': data['eur']['rate'] if currency_from != 'eur' else 1}
 while True:
     currency_to = input().lower()
-    if len(currency_to) < 1:
+    if currency_to == '':
         break
     else:
-        amount = float(input())
-        print("Checking the cache...")
+        amount = int(input())
+        print('Checking the cache...')
         if currency_to in cache.keys():
-            print("Oh! It is in the cache!")
-            print(f"You received {round(amount * (cache[currency_to]['rate']), 2)} {currency_to.upper()}.")
+            print('Oh! It is in the cache!')
         else:
-            print("Sorry, but it is not in the cache!")
-            r = requests.get(f"http://www.floatrates.com/daily/{currency_from}.json")
-            conv = json.loads(r.text)
-            cache[currency_to] = conv[currency_to]
-            print(f"You received {round(amount * (cache[currency_to]['rate']), 2)} {currency_to.upper()}.")
+            print('Sorry, but it is not in the cache!')
+            cache[currency_to] = data[currency_to]['rate']
+        print(f'You received {round(amount * cache[currency_to], 2)} {currency_to.upper()}.')
