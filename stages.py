@@ -1,5 +1,4 @@
-# Stage 2/6: Talking numbers
-no_coincoin = int(input(""))
-print(f"""I have {no_coincoin} conicoins.
-{no_coincoin} conicoins cost {no_coincoin * 100} dollars.
-I am rich! Yippee!""")
+# Stage 3/6: More interaction
+no_coincoin = int(input("Please, enter the number of conicoins you have: "))
+exchange_rate = float(input("Please, enter the exchange rate: "))
+print(f"The total amount of dollars: {round(no_coincoin * exchange_rate, 2)}")
